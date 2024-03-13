@@ -25,7 +25,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            //put your multiplatform dependencies here
+            implementation("io.ktor:ktor-client-core:1.6.7") // Use the latest version
+            implementation("io.ktor:ktor-client-content-negotiation:1.6.7")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
