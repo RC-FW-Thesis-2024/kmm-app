@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.kmm_app.android.components.WorkoutCard
 import com.example.kmm_app.shared.model.Workout
 import com.example.kmm_app.shared.network.ApiClient
 import kotlinx.coroutines.launch
@@ -64,26 +65,6 @@ fun AllWorkoutsScreen(apiClient: ApiClient = ApiClient()) {
                     WorkoutCard(workout)
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun WorkoutCard(workout: Workout) {
-    Card(
-        modifier = Modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.surfaceVariant)
-                .padding(16.dp)
-        ) {
-            Text(text = workout.title, style = MaterialTheme.typography.headlineSmall)
-            Text(text = "Duration: ${workout.duration}")
-            Text(text = "Date: ${workout.date}")
         }
     }
 }
