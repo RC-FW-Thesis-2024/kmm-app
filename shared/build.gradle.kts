@@ -25,8 +25,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation("io.ktor:ktor-client-core:1.6.7") // Use the latest version
-            implementation("io.ktor:ktor-client-content-negotiation:1.6.7")
+
+            implementation("io.ktor:ktor-client-core:2.3.9")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.9")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
         }
         commonTest.dependencies {

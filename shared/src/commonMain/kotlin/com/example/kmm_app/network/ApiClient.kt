@@ -21,15 +21,15 @@ class ApiClient {
             header("Access-Control-Request-Headers", "*")
             header("api-key", apiKey)
             header("Accept", "application/json")
-            body = """
+            setBody( """
                 {
                     "dataSource": "Cluster0",
                     "database": "Thesis",
                     "collection": "workouts"
                 }
-            """.trimIndent()
+            """.trimIndent())
         }
-        val responseBody: String = response.readText()
+        val responseBody: String = response.bodyAsText()
         val documents = Json.parseToJsonElement(responseBody).jsonObject["documents"]?.jsonArray
         return documents?.map { json.decodeFromString<Workout>(it.toString()) } ?: emptyList()
     }
