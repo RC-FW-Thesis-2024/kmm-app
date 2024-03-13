@@ -16,15 +16,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.kmm_app.android.screens.AllWorkoutsScreen
 import com.example.kmm_app.android.screens.HomeScreen
+import com.example.kmm_app.shared.network.ApiClient
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, apiClient: ApiClient) {
     NavHost(navController, startDestination = Destinations.HomeScreen.route) {
         composable(Destinations.HomeScreen.route) {
             HomeScreen()
         }
         composable(Destinations.AllWorkouts.route) {
-            AllWorkoutsScreen()
+            AllWorkoutsScreen(apiClient = apiClient)
         }
     }
 }
