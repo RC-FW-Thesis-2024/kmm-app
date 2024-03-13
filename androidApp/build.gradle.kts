@@ -46,4 +46,5 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.androidx.navigation.compose)
+    implementation("io.ktor:ktor-client-android:2.3.9")
 }
