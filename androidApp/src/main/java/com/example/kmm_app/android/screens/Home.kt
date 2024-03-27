@@ -43,18 +43,6 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val workout = remember {
-        Workout(
-            _id = UUID.randomUUID().toString(),
-            title = "Morning Run",
-            date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()).format(Date()),
-            duration = elapsedTime,
-            latitude = latitude.toString(),
-            longitude = longitude.toString()
-        )
-    }
-
-
     LaunchedEffect(isRunning) {
             while (isActive && isRunning) {
                 elapsedTime = stopwatch.getFormattedElapsedTime()
@@ -67,6 +55,8 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val locationListener = object : LocationListener {
             override fun onLocationChanged(location: android.location.Location) {
+                latitude = location.latitude
+                longitude = location.longitude
                 locationText = "Lat: ${location.latitude}, Long: ${location.longitude}"
                 locationManager.removeUpdates(this) // We only want the first location
             }
@@ -88,9 +78,18 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
     }
 
     fun postWorkout() {
+        val currentWorkout = Workout(
+            _id = UUID.randomUUID().toString(),
+            title = "Morning Run",
+            date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()).format(Date()),
+            duration = elapsedTime,
+            latitude = latitude.toString(),
+            longitude = longitude.toString()
+        )
+
         scope.launch {
             try {
-                apiClient.setWorkout(workout)
+                apiClient.setWorkout(currentWorkout) // Use the updated workout instance
             } catch (e: Exception) {
                 Log.d("APIcall", "Catch $e")
             }
