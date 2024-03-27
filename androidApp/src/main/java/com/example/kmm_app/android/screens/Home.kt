@@ -1,9 +1,11 @@
 package com.example.kmm_app.android.screens
 
 import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,32 +25,49 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kmm_app.android.Stopwatch
+import com.example.kmm_app.shared.model.Workout
+import com.example.kmm_app.shared.network.ApiClient
 import kotlinx.coroutines.*
+import java.util.Date
+import java.util.UUID
+import java.util.Locale
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(apiClient: ApiClient = ApiClient()) {
     val stopwatch = remember { Stopwatch() }
     var elapsedTime by remember { mutableStateOf("00:00:00") }
     var isRunning by remember { mutableStateOf(false) }
     var locationText by remember { mutableStateOf("Fetching location...") }
+    var latitude by remember { mutableDoubleStateOf(0.0) }
+    var longitude by remember { mutableDoubleStateOf(0.0) }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    val workout = remember {
+        Workout(
+            _id = UUID.randomUUID().toString(),
+            title = "Morning Run",
+            date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()).format(Date()),
+            duration = elapsedTime,
+            latitude = latitude.toString(),
+            longitude = longitude.toString()
+        )
+    }
 
 
     LaunchedEffect(isRunning) {
-        if (isRunning) {
             while (isActive && isRunning) {
                 elapsedTime = stopwatch.getFormattedElapsedTime()
                 delay(1000) // Update the time every second
             }
-        }
     }
 
     // This effect runs once when the composable is first put on screen
-    DisposableEffect(Unit) {
+    fun fetchLocation() {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val locationListener = object : LocationListener {
             override fun onLocationChanged(location: android.location.Location) {
-                locationText = "Lat: ${location.latitude}, Lon: ${location.longitude}"
+                locationText = "Lat: ${location.latitude}, Long: ${location.longitude}"
                 locationManager.removeUpdates(this) // We only want the first location
             }
 
@@ -62,10 +81,19 @@ fun HomeScreen() {
         } catch (e: SecurityException) {
             locationText = "Location permission not granted"
         }
+    }
 
-        // Cleanup function to remove the location listener
-        onDispose {
-            locationManager.removeUpdates(locationListener)
+    LaunchedEffect(true) {
+        fetchLocation()
+    }
+
+    fun postWorkout() {
+        scope.launch {
+            try {
+                apiClient.setWorkout(workout)
+            } catch (e: Exception) {
+                Log.d("APIcall", "Catch $e")
+            }
         }
     }
 
@@ -118,7 +146,10 @@ fun HomeScreen() {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            // Implement save functionallity here
+            postWorkout()
+            elapsedTime = "00:00:00"
+            locationText = "Fetching location..."
+            fetchLocation()
         }) {
             Text("Save")
         }
