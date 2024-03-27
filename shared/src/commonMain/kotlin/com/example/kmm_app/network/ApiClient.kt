@@ -33,4 +33,26 @@ class ApiClient {
         val documents = Json.parseToJsonElement(responseBody).jsonObject["documents"]?.jsonArray
         return documents?.map { json.decodeFromString<Workout>(it.toString()) } ?: emptyList()
     }
+
+    suspend fun setWorkout(workout: Workout) {
+        val workoutJson = json.encodeToString(Workout.serializer(), workout)
+        val response: HttpResponse = client.post("https://eu-west-2.aws.data.mongodb-api.com/app/data-xcipb/endpoint/data/v1/action/insertOne") {
+            header("Content-Type", "application/json")
+            header("Access-Control-Request-Headers", "*")
+            header("api-key", apiKey)
+            header("Accept", "application/json")
+            setBody( """
+                {
+                    "dataSource": "Cluster0",
+                    "database": "Thesis",
+                    "collection": "post_workouts",
+                    "document": $workoutJson
+                }
+            """.trimIndent())
+        }
+        // Check the response status or handle it as needed
+        if (response.status != HttpStatusCode.OK) {
+            throw Exception("Failed to post workout: ${response.status}")
+        }
+    }
 }
