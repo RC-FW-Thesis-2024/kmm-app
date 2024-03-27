@@ -5,6 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,17 +28,26 @@ fun AllWorkoutsScreen(apiClient: ApiClient = ApiClient()) {
     var workouts by remember { mutableStateOf(emptyList<Workout>()) }
     var isLoading by remember { mutableStateOf(true) }
 
-    LaunchedEffect(Unit) {
+
+    fun emptyWorkouts() {
+        workouts = emptyList()
+    }
+
+    fun fetchWorkouts() {
         scope.launch {
             isLoading = true
             try {
                 workouts = apiClient.getWorkouts()
             } catch (e: Exception) {
-                Log.d("APIcall","Catch $e")
+                Log.d("APIcall", "Catch $e")
             } finally {
                 isLoading = false
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        fetchWorkouts()
     }
 
     Column(
@@ -42,15 +55,26 @@ fun AllWorkoutsScreen(apiClient: ApiClient = ApiClient()) {
             .fillMaxSize()
             .background(color = Color.DarkGray)
     ) {
-        Text(
-            text = "All Workouts",
-            style = MaterialTheme.typography.titleLarge,
-            color = Color.White,
+        Row(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
                 .padding(16.dp),
-            textAlign = TextAlign.Center,
-        )
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = {emptyWorkouts()}) {
+                Icon(Icons.Filled.Delete, contentDescription = "Clear Workouts")
+            }
+            Text(
+                text = "All Workouts",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+            )
+            IconButton(onClick = {fetchWorkouts()}) {
+                Icon(Icons.Filled.Refresh, contentDescription = "Clear Workouts")
+            }
+        }
 
         if (isLoading) {
             CircularProgressIndicator(
