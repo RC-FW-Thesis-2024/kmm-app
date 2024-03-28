@@ -17,15 +17,11 @@ import com.example.kmm_app.shared.model.Workout
 fun WorkoutCard(workout: Workout) {
     Card(
         modifier = Modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
+            .padding(vertical = 4.dp, horizontal = 4.dp)
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.surfaceVariant)
-                .padding(16.dp)
-        ) {
+        Column() {
             Text(text = workout.title, style = MaterialTheme.typography.headlineSmall)
             Text(text = "Duration: ${workout.duration}")
             Text(text = "Date: ${workout.date}")

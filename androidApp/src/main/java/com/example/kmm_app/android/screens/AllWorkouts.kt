@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -22,6 +23,7 @@ import com.example.kmm_app.shared.model.Workout
 import com.example.kmm_app.shared.network.ApiClient
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllWorkoutsScreen(apiClient: ApiClient = ApiClient()) {
     val scope = rememberCoroutineScope()
@@ -53,42 +55,37 @@ fun AllWorkoutsScreen(apiClient: ApiClient = ApiClient()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.DarkGray)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            IconButton(onClick = {emptyWorkouts()}) {
-                Icon(Icons.Filled.Delete, contentDescription = "Clear Workouts")
+        CenterAlignedTopAppBar(title = { Text("Activities") },
+            navigationIcon = {
+                IconButton(onClick = {emptyWorkouts()}) {
+                    Icon(Icons.Filled.Delete, contentDescription = "Get Location")
+                }
+            },
+            actions = {
+                IconButton(onClick = { fetchWorkouts()}) {
+                    Icon(Icons.Filled.Refresh, contentDescription = "Action Icon Description")
+                }
             }
-            Text(
-                text = "All Workouts",
-                style = MaterialTheme.typography.titleLarge,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-            )
-            IconButton(onClick = {fetchWorkouts()}) {
-                Icon(Icons.Filled.Refresh, contentDescription = "Clear Workouts")
-            }
-        }
+        )
 
-        if (isLoading) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        } else {
-            LazyColumn(
-                modifier = Modifier.padding(8.dp)
-            ) {
-                items(workouts) { workout ->
-                    WorkoutCard(workout)
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center){
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    items(workouts) { workout ->
+                        WorkoutCard(workout)
+                    }
                 }
             }
         }
+
+
     }
 }
