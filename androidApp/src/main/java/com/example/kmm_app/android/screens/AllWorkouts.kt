@@ -55,7 +55,7 @@ fun AllWorkoutsScreen(apiClient: ApiClient = ApiClient()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-    ) {,
+    ) {
         CenterAlignedTopAppBar(title = { Text("Activities") },
             navigationIcon = {
                 IconButton(onClick = {emptyWorkouts()}) {
