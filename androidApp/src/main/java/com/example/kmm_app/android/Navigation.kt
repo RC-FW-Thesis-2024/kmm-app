@@ -40,8 +40,7 @@ fun BottomBar(
     )
 
     NavigationBar(
-        modifier = modifier,
-        containerColor = Color.LightGray,
+        modifier = modifier
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -65,9 +64,6 @@ fun BottomBar(
                         restoreState = true
                     }
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    unselectedTextColor = Color.Gray, selectedTextColor = Color.White
-                ),
             )
         }
     }

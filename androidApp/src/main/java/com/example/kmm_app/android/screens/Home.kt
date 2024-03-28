@@ -1,5 +1,6 @@
 package com.example.kmm_app.android.screens
 
+import androidx.compose.material3.*
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.location.LocationListener
@@ -17,7 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -32,12 +40,13 @@ import java.util.Date
 import java.util.UUID
 import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(apiClient: ApiClient = ApiClient()) {
     val stopwatch = remember { Stopwatch() }
     var elapsedTime by remember { mutableStateOf("00:00:00") }
     var isRunning by remember { mutableStateOf(false) }
-    var locationText by remember { mutableStateOf("Fetching location...") }
+    var locationText by remember { mutableStateOf("Location not fetched yet") }
     var latitude by remember { mutableDoubleStateOf(0.0) }
     var longitude by remember { mutableDoubleStateOf(0.0) }
     val context = LocalContext.current
@@ -73,9 +82,6 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
         }
     }
 
-    LaunchedEffect(true) {
-        fetchLocation()
-    }
 
     fun postWorkout() {
         val currentWorkout = Workout(
@@ -95,18 +101,23 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
             }
         }
     }
+    CenterAlignedTopAppBar(title = { Text("Home") },
+        navigationIcon = {
+            IconButton(onClick = {fetchLocation()}) {
+                Icon(Icons.Filled.Place, contentDescription = "Get Location")
+            }
+        })
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.DarkGray)
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
         Text(
             text = elapsedTime,
-            color = Color.White,
             style = TextStyle(
                 fontSize = 55.sp, // Adjust the size as needed
                 fontWeight = FontWeight.Bold // Make the text bold
@@ -115,7 +126,6 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = locationText,
-            color = Color.White,
             style = TextStyle(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal
