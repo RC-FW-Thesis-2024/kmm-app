@@ -23,7 +23,10 @@ fun WorkoutCard(workout: Workout) {
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column() {
+        Column(
+            modifier = Modifier
+                .padding(all=7.dp)
+        ) {
             Text(text = workout.title, style = MaterialTheme.typography.titleMedium)
             Text(
                 text = "Duration: ${workout.duration}",
