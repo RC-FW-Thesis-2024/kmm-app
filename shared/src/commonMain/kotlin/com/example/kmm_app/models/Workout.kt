@@ -9,6 +9,6 @@ data class Workout(
     val title: String,
     val date: String,
     val duration: String,
-    val latitude: String,
-    val longitude: String
+    val latitude: Double,
+    val longitude: Double
 )

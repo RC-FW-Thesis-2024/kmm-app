@@ -10,7 +10,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.kmm_app.shared.model.Workout
 
 @Composable
@@ -22,9 +24,20 @@ fun WorkoutCard(workout: Workout) {
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column() {
-            Text(text = workout.title, style = MaterialTheme.typography.headlineSmall)
-            Text(text = "Duration: ${workout.duration}")
-            Text(text = "Date: ${workout.date}")
+            Text(text = workout.title, style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = "Duration: ${workout.duration}",
+                style = TextStyle(fontSize = 12.sp)
+            )
+            Text(text = "Date: ${workout.date}",
+                style = TextStyle(fontSize = 12.sp)
+            )
+            Text(text = "Latitude: ${workout.latitude}",
+                style = TextStyle(fontSize = 12.sp)
+            )
+            Text(text = "Longitude: ${workout.longitude}",
+                style = TextStyle(fontSize = 12.sp)
+            )
         }
     }
 }
