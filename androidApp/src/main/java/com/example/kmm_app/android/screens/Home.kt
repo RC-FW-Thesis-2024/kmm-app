@@ -89,8 +89,8 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
             title = "Morning Run",
             date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()).format(Date()),
             duration = elapsedTime,
-            latitude = latitude.toString(),
-            longitude = longitude.toString()
+            latitude = latitude,
+            longitude = longitude
         )
 
         scope.launch {
