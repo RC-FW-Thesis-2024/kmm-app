@@ -9,14 +9,16 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
+import com.example.kmm_app.network.env
 
 class ApiClient {
     private val client = HttpClient()
     private val json = Json { ignoreUnknownKeys = true }
-    private val apiKey = "QuDD0qTgxpIsOm0viZLuyCOUmRIA5pfOMwPLRCaKzZqufPgksEVq7NSLCxLkqB2b"
+    private val apiKey = env.API_KEY
+    private val baseUrl = env.DATABASE_URL
 
     suspend fun getWorkouts(): List<Workout> {
-        val response: HttpResponse = client.post("https://eu-west-2.aws.data.mongodb-api.com/app/data-xcipb/endpoint/data/v1/action/find") {
+        val response: HttpResponse = client.post("$baseUrl/action/find") {
             header("Content-Type", "application/json")
             header("Access-Control-Request-Headers", "*")
             header("api-key", apiKey)
@@ -36,7 +38,7 @@ class ApiClient {
 
     suspend fun setWorkout(workout: Workout) {
         val workoutJson = json.encodeToString(Workout.serializer(), workout)
-        val response: HttpResponse = client.post("https://eu-west-2.aws.data.mongodb-api.com/app/data-xcipb/endpoint/data/v1/action/insertOne") {
+        val response: HttpResponse = client.post("$baseUrl/action/insertOne") {
             header("Content-Type", "application/json")
             header("Access-Control-Request-Headers", "*")
             header("api-key", apiKey)
