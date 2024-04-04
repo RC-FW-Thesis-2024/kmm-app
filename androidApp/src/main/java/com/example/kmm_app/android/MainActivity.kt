@@ -2,7 +2,6 @@ package com.example.kmm_app.android
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -19,7 +18,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.kmm_app.shared.network.ApiClient
 import android.Manifest
-import java.lang.Exception
 
 class MainActivity : ComponentActivity() {
     private val locationPermissionRequestCode = 100
