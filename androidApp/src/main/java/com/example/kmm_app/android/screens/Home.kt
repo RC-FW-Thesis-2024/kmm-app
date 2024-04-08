@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Place
@@ -106,7 +107,14 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
             IconButton(onClick = {fetchLocation()}) {
                 Icon(Icons.Filled.Place, contentDescription = "Get Location")
             }
-        })
+
+        },
+        actions = {
+            IconButton(onClick = {locationText = "No location data"}) {
+                Icon(Icons.Filled.Clear, contentDescription = "Reset location")
+            }
+        }
+    )
 
     Column(
         modifier = Modifier
@@ -157,8 +165,6 @@ fun HomeScreen(apiClient: ApiClient = ApiClient()) {
         Button(onClick = {
             postWorkout()
             elapsedTime = "00:00:00"
-            locationText = "Fetching location..."
-            fetchLocation()
         }) {
             Text("Save")
         }
